@@ -25,7 +25,7 @@ func GetTTSToken(text string) (string, error) {
 	return CalculateToken(text, key1, key2), nil
 }
 
-func getTTSKeyFromHTML() (key1, key2 int, err error) {
+func getTTSKeyFromHTML() (key1, key2 int64, err error) {
 	const tokenURL = "https://translate.google.com"
 	resp, err := http.Get(tokenURL)
 	if err != nil {
@@ -46,17 +46,17 @@ func getTTSKeyFromHTML() (key1, key2 int, err error) {
 	part2, _ := strconv.Atoi(matchList[2])
 	part3, _ := strconv.Atoi(matchList[3])
 
-	return part3, part1 + part2, nil
+	return int64(part3), int64(part1 + part2), nil
 }
 
 // CalculateToken caluculates token from tts text and seed keys.
-func CalculateToken(text string, key1, key2 int) string {
+func CalculateToken(text string, key1, key2 int64) string {
 	const salt1 = "+-a^+6"
 	const salt2 = "+-3^+b+-f"
 
 	a := key1
 	for _, v := range []byte(text) {
-		a += int(v)
+		a += int64(v)
 		a = workToken(a, salt1)
 	}
 	a = workToken(a, salt2)
@@ -69,17 +69,17 @@ func CalculateToken(text string, key1, key2 int) string {
 	return fmt.Sprintf("%d.%d", a, a^key1)
 }
 
-func workToken(a int, seed string) int {
+func workToken(a int64, seed string) int64 {
 	for i, max := 0, len(seed)-2; i < max; i += 3 {
 		charByte := seed[i+2]
 		char := string(charByte)
 
-		var d int
+		var d int64
 		switch {
 		case char >= "a":
-			d = int(charByte) - 87
+			d = int64(charByte) - 87
 		default:
-			d, _ = strconv.Atoi(char)
+			d, _ = strconv.ParseInt(char, 10, 64)
 		}
 
 		switch {
@@ -99,13 +99,13 @@ func workToken(a int, seed string) int {
 	return a
 }
 
-func rshift(val, n int) int {
+func rshift(val, n int64) int64 {
 	if val >= 0 {
-		return val >> uint(n)
+		return val >> uint64(n)
 	}
-	return (val + 0x100000000) >> uint(n)
+	return (val + 0x100000000) >> uint64(n)
 }
 
-func lshift(val, n int) int {
-	return val << uint(n)
+func lshift(val, n int64) int64 {
+	return val << uint64(n)
 }
