@@ -3,6 +3,7 @@ package googletts
 import (
 	"errors"
 	"strconv"
+	"unicode/utf8"
 )
 
 // Option contains optional parameters for Google TTS API.
@@ -53,7 +54,7 @@ func (o Option) getTextLength() string {
 	if o.TextLength > 0 {
 		return strconv.Itoa(o.TextLength)
 	}
-	return strconv.Itoa(len(o.Text))
+	return strconv.Itoa(utf8.RuneCountInString(o.Text))
 }
 
 func (o Option) getToken() string {
