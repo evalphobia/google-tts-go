@@ -39,6 +39,9 @@ func GetTTSURLWithOption(opt Option) (string, error) {
 	params.Set("q", opt.getText())
 	params.Set("textlen", opt.getTextLength())
 	params.Set("ttsspeed", opt.getTTSSpeed())
+	params.Set("total", "1")
+	params.Set("idx", "0")
+	params.Set("prev", "input")
 	params.Set("tk", token)
 
 	return fmt.Sprintf("%s?%s", defaultAPIURL, params.Encode()), nil
