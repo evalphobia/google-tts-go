@@ -42,11 +42,11 @@ func getTTSKeyFromHTML() (key1, key2 int64, err error) {
 	if len(matchList) != 4 {
 		return 0, 0, fmt.Errorf("HTML parse error")
 	}
-	part1, _ := strconv.Atoi(matchList[1])
-	part2, _ := strconv.Atoi(matchList[2])
-	part3, _ := strconv.Atoi(matchList[3])
+	part1, _ := strconv.ParseInt(matchList[1], 10, 64)
+	part2, _ := strconv.ParseInt(matchList[2], 10, 64)
+	part3, _ := strconv.ParseInt(matchList[3], 10, 64)
 
-	return int64(part3), int64(part1 + part2), nil
+	return part3, part1 + part2, nil
 }
 
 // CalculateToken caluculates token from tts text and seed keys.
