@@ -48,7 +48,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(url) // => 368668.249914
+	fmt.Println(tk) // => 368668.249914
 }
 ```
 
