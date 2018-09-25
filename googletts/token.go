@@ -9,7 +9,7 @@ import (
 )
 
 // get token seed from HTML.
-var tokenRegex = regexp.MustCompile(`TKK=eval.*var a\\x3d([0-9+-]+);var b\\x3d([0-9+-]+);return ([0-9+-]+)\+\\x27.\\x27`)
+var tokenRegex = regexp.MustCompile(`;TKK='([\d]+)\.([\d]+)';`)
 
 // GetTTSToken gets TTS token.
 func GetTTSToken(text string) (string, error) {
@@ -39,14 +39,13 @@ func getTTSKeyFromHTML() (key1, key2 int64, err error) {
 	}
 
 	matchList := tokenRegex.FindStringSubmatch(string(body))
-	if len(matchList) != 4 {
+	if len(matchList) != 3 {
 		return 0, 0, fmt.Errorf("HTML parse error")
 	}
 	part1, _ := strconv.ParseInt(matchList[1], 10, 64)
 	part2, _ := strconv.ParseInt(matchList[2], 10, 64)
-	part3, _ := strconv.ParseInt(matchList[3], 10, 64)
 
-	return part3, part1 + part2, nil
+	return part1, part2, nil
 }
 
 // CalculateToken caluculates token from tts text and seed keys.
