@@ -9,7 +9,7 @@ import (
 )
 
 // get token seed from HTML.
-var tokenRegex = regexp.MustCompile(`;TKK='([\d]+)\.([\d]+)';`)
+var tokenRegex = regexp.MustCompile(`,tkk:'([\d]+)\.([\d]+)',`)
 
 // GetTTSToken gets TTS token.
 func GetTTSToken(text string) (string, error) {
